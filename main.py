@@ -45,7 +45,7 @@ for index in serial_ports():
     # on the dropdown. We'll pass the text of the button as the data of the
     # selection.
     btn.bind(on_release=lambda btn: dropdown.select(btn.text))
-
+#dddd
     # then add the button inside the dropdown
     dropdown.add_widget(btn)
 
@@ -61,5 +61,4 @@ mainbutton.bind(on_release=dropdown.open)
 # one last thing, listen for the selection in the dropdown list and
 # assign the data to the button text.
 dropdown.bind(on_select=lambda instance, x: setattr(mainbutton, 'text', x))
-
 runTouchApp(mainbutton)
