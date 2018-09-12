@@ -1,26 +1,39 @@
 import serial
 import time
 
-ser = serial.Serial('COM5', 115200, timeout = 1) # ttyACM1 for Arduino board
 
+ser = serial.Serial('COM21', 115200, timeout = 1) # ttyACM1 for Arduino board
 readOut = 0   #chars waiting from laser range finder
-
 print ("Starting up")
 connected = False
-commandToSend = 1 # get the distance in mm
+def task():
+    print("Attempt to Read")
+    readOut = ser.readline().decode('ascii')
+    print("Reading: ", readOut)
+    print("Restart")
+    ser.flush()  # flush the buffer
+    if len(str(readOut)) == 0:
+        return False
+    return True
 
-while True:
-    print ("Writing: ",  commandToSend)
+def login():
+    commandToSend = 'V+LOGIN9876'  # get the distance in mm
+    print("Writing: ", commandToSend)
     ser.write(str(commandToSend).encode())
-    time.sleep(1)
+    task()
+
+def user():
+    commandToSend = 'V+UFUSER' # get the distance in mm
+    print("Writing: ", commandToSend)
+    ser.write(str(commandToSend).encode())
+
     while True:
-        try:
-            print ("Attempt to Read")
-            readOut = ser.readline().decode('ascii')
-            time.sleep(1)
-            print ("Reading: ", readOut)
+        if not task():
             break
-        except:
-            pass
-    print ("Restart")
-    ser.flush() #flush the buffer
+
+
+
+
+
+
+
