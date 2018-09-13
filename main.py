@@ -1,16 +1,13 @@
 from kivy.app import App
-from kivy.lang import Builder
 from kivy.properties import ObjectProperty, StringProperty
 from kivy.clock import Clock
 from kivymd.theming import ThemeManager
-# from kivymd.navigationdrawer import NavigationDrawer
 from kivymd.bottomsheet import MDListBottomSheet, MDGridBottomSheet
 from kivymd.label import MDLabel
 from kivymd.dialog import MDDialog
 from kivymd.snackbar import Snackbar
 from getPortList import getPortLIst
-from kivy.uix.image import Image
-from kivy.uix.camera import Camera
+
 
 class Main(App):
     theme_cls = ThemeManager()
@@ -55,13 +52,21 @@ class Main(App):
 
     def bottom_camera_list(self):
         bs = MDGridBottomSheet()
-        bs.add_item("User List", lambda x: x,
+        bs.add_item("User List", lambda *x: self.userLIst(),
                     icon_src='./assets/list.png')
-        bs.add_item("Face Record", lambda x: x,
+        bs.add_item("Face Record", lambda *x: self.faceRecord(),
                     icon_src='./assets/record.png')
-        bs.add_item("Face Detection", lambda x: x,
+        bs.add_item("Face Detection", lambda *x: self.faceDetect(),
                     icon_src='./assets/detection.png')
         bs.open()
+    def userLIst(self):
+        print('userLIst')
+
+    def faceRecord(self):
+        print('faceRecord')
+
+    def faceDetect(self):
+        print('faceDetect')
 
     def disconnect(self):
         print("disconnect")
