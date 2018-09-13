@@ -1,64 +1,94 @@
-import sys
-import glob
-import serial
-from kivy.uix.dropdown import DropDown
-from kivy.uix.button import Button
-from kivy.base import runTouchApp
+from kivy.app import App
+from kivy.lang import Builder
+from kivy.properties import ObjectProperty, StringProperty
+from kivy.clock import Clock
+from kivymd.theming import ThemeManager
+# from kivymd.navigationdrawer import NavigationDrawer
+from kivymd.bottomsheet import MDListBottomSheet, MDGridBottomSheet
+from kivymd.label import MDLabel
+from kivymd.dialog import MDDialog
+from kivymd.snackbar import Snackbar
+from getPortList import getPortLIst
+from kivy.uix.image import Image
+from kivy.uix.camera import Camera
 
-def serial_ports():
-    """ Lists serial port names
+class Main(App):
+    theme_cls = ThemeManager()
+    nav_drawer = ObjectProperty()
 
-        :raises EnvironmentError:
-            On unsupported or unknown platforms
-        :returns:
-            A list of the serial ports available on the system
-    """
-    if sys.platform.startswith('win'):
-        ports = ['COM%s' % (i + 1) for i in range(256)]
-    elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-        # this excludes your current terminal "/dev/tty"
-        ports = glob.glob('/dev/tty[A-Za-z]*')
-    elif sys.platform.startswith('darwin'):
-        ports = glob.glob('/dev/tty.*')
-    else:
-        raise EnvironmentError('Unsupported platform')
+    returnList = getPortLIst()
+    port_list = []
 
-    result = []
-    for port in ports:
-        try:
-            s = serial.Serial(port)
-            s.close()
-            result.append(port)
-        except (OSError, serial.SerialException):
-            pass
-    return result
-# create a dropdown with 10 buttons
-dropdown = DropDown()
-for index in serial_ports():
-    # When adding widgets, we need to specify the height manually
-    # (disabling the size_hint_y) so the dropdown can calculate
-    # the area it needs.
+    value = ""
 
-    btn = Button(text=index, size_hint_y=None, height=44)
+    for text in returnList.serial_ports():
+        port_list.append({'viewclass':'MDMenuItem','text':text})
 
-    # for each button, attach a callback that will call the select() method
-    # on the dropdown. We'll pass the text of the button as the data of the
-    # selection.
-    btn.bind(on_release=lambda btn: dropdown.select(btn.text))
-#dddd
-    # then add the button inside the dropdown
-    dropdown.add_widget(btn)
+    def change_variable(self, value):
+        self.value = value
+        self.root.ids.portLabel.text = value
 
-# create a big main button
-mainbutton = Button(text='select serial', size_hint=(None, None))
+    def build(self):
+        pass
 
-# show the dropdown menu when the main button is released
-# note: all the bind() calls pass the instance of the caller (here, the
-# mainbutton instance) as the first argument of the callback (here,
-# dropdown.open.).
-mainbutton.bind(on_release=dropdown.open)
+    def change_screen(self):
+        print()
+        if(self.root.ids.scr_mngr.current == 'connection'):
+            self.root.ids.scr_mngr.current = 'camera'
+            self.root.ids.toolbar.title = 'Camera'
+            self.root.ids.spinner.active = False
+        elif(self.root.ids.scr_mngr.current == 'camera'):
+            self.root.ids.scr_mngr.current = 'connection'
+            self.root.ids.toolbar.title = 'Connection'
 
-# one last thing, listen for the selection in the dropdown list and
-# assign the data to the button text.
-dropdown.bind(on_select=lambda instance, x: setattr(mainbutton, 'text', x))
-runTouchApp(mainbutton)
+    def serialConnect(self):
+        self.root.ids.spinner.active = True
+        Snackbar(text="connecting...").show()
+        checkConnection = True
+        # connection = serialConnect
+        if(checkConnection):
+            Snackbar(text="connect success").show()
+            Clock.schedule_once(lambda dt: self.change_screen(), 3)
+        else:
+            Snackbar(text="connect fail").show()
+            self.root.ids.spinner.active = False
+
+    def bottom_camera_list(self):
+        bs = MDGridBottomSheet()
+        bs.add_item("User List", lambda x: x,
+                    icon_src='./assets/list.png')
+        bs.add_item("Face Record", lambda x: x,
+                    icon_src='./assets/record.png')
+        bs.add_item("Face Detection", lambda x: x,
+                    icon_src='./assets/detection.png')
+        bs.open()
+
+    def disconnect(self):
+        print("disconnect")
+        Snackbar(text="disconnect").show()
+        self.change_screen()
+
+    def showDialogToReset(self):
+        print("reset data")
+        content = MDLabel(font_style='Body1',
+                          theme_text_color='Secondary',
+                          text="This is a dialog with a title and some text. "
+                               "That's pretty awesome right!",
+                          size_hint_y=None,
+                          valign='top')
+        content.bind(texture_size=content.setter('size'))
+        self.dialog = MDDialog(title="Are you sure?",
+                               content=content,
+                               size_hint=(.8, None),
+                               auto_dismiss=False)
+        self.dialog.add_action_button("Yes",
+                                      action=lambda *x: self.resetData())
+        self.dialog.add_action_button("No",
+                                      action=lambda *x: self.dialog.dismiss())
+        self.dialog.open()
+
+    def resetData(self):
+        self.dialog.dismiss()
+        print("reset")
+
+Main().run()
