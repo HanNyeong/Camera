@@ -131,9 +131,8 @@ BoxLayout:
                         orientation: 'vertical'
                         MDRaisedButton:
                             text: "Option"
-                            size: (300, 50)
-                            pos_hint: {'center_x': 0.5, 'center_y': 0.1}
-                            on_release: app.show_example_bottom_sheet()
+                            pos_hint: {'center_x': 0.5}
+                            on_release: app.bottom_camera_list()
 
                 MDBottomNavigationItem:
                     name: 'setting'
