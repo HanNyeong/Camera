@@ -52,7 +52,7 @@ BoxLayout:
                 theme_text_color: 'Primary'
                 text: "Port : "
                 size_hint_x:None
-                pos_hint: {'center_x': 0.4, 'center_y': 0.8}
+                pos_hint: {'center_x': 0.4, 'center_y': 0.7}
                 height: self.texture_size[1] + dp(4)
             MDLabel:
                 id:portLabel
@@ -60,39 +60,38 @@ BoxLayout:
                 theme_text_color: 'Primary'
                 text: ""
                 size_hint_x:None
-                pos_hint: {'center_x': 0.63, 'center_y': 0.8}
+                pos_hint: {'center_x': 0.63, 'center_y': 0.7}
                 height: self.texture_size[1] + dp(4)
-            MDFlatButton:
+            MDIconButton:
+                icon:'arrow-down-drop-circle'
                 size_hint: None, None
-                pos_hint: {'center_x': 0.62, 'center_y': 0.8}
-                color:(1,1,1,1)
+                pos_hint: {'center_x': 0.67, 'center_y': 0.7}
                 on_release: MDDropdownMenu(items=app.port_list, width_mult=4).open(self)
             MDLabel:
-
                 font_style: 'Subhead'
                 theme_text_color: 'Primary'
                 text: "Baud : "
                 size_hint_x:None
-                pos_hint: {'center_x': 0.4, 'center_y': 0.7}
+                pos_hint: {'center_x': 0.4, 'center_y': 0.6}
             MDLabel:
                 id:baudLabel
                 font_style: 'Subhead'
                 theme_text_color: 'Primary'
                 text: "115200 "
                 size_hint_x:None
-                pos_hint: {'center_x': 0.63, 'center_y': 0.7}
+                pos_hint: {'center_x': 0.63, 'center_y': 0.6}
             MDLabel:
                 font_style: 'Subhead'
                 theme_text_color: 'Primary'
                 text: "Password : "
                 size_hint_x:None
-                pos_hint: {'center_x': 0.4, 'center_y': 0.6}
+                pos_hint: {'center_x': 0.4, 'center_y': 0.5}
             MDLabel:
                 font_style: 'Subhead'
                 theme_text_color: 'Primary'
                 text: "9876"
                 size_hint_x:None
-                pos_hint: {'center_x': 0.63, 'center_y': 0.6}
+                pos_hint: {'center_x': 0.63, 'center_y': 0.5}
             #M#D#L#a#b#e#l#:#
     # # # # # # # # # # # # #f#o#n#t#_#s#t#y#l#e#:# #'#S#u#b#h#e#a#d#'#
     # # # # # # # # # # # # #t#h#e#m#e#_#t#e#x#t#_#c#o#l#o#r#:# #'#P#r#i#m#a#r#y#'#
@@ -129,21 +128,29 @@ BoxLayout:
                     icon: "camera"
                     BoxLayout:
                         orientation: 'vertical'
+                        size_hint_y: None
+                        padding: dp(48)
+                        spacing: 10
+                        Camera:
+                            id: cameraView
                         MDRaisedButton:
                             text: "Option"
-                            pos_hint: {'center_x': 0.5}
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                             on_release: app.bottom_camera_list()
-
                 MDBottomNavigationItem:
                     name: 'setting'
                     text: "Setting"
                     icon: 'file'
                     BoxLayout:
                         orientation: 'vertical'
-                        size_hint_y: None
                         padding: dp(48)
                         spacing: 10
-                        MDTextField:
-                            hint_text: "You can put any widgets here"
-                            helper_text: "Hello :)"
-                            helper_text_mode: "on_focus"
+                        MDList:
+                            id: ml
+                            pos_hint: {'center_x': 0.5, 'center_y': 0.9}
+                            OneLineListItem:
+                                text: "Disconnect"
+                                on_release:app.disconnect()
+                            TwoLineListItem:
+                                text: "Reset Database"
+                                on_release:app.showDialogToReset()
