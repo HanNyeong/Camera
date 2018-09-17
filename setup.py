@@ -7,7 +7,7 @@ setup(
     author      ='',
     author_email='',
     packages    =['Camera'],
-    data_files=[('Camera/assets', ['Camera/assets/detection.png','Camera/assets/list.png','Camera/assets/record.png'])],
+    data_files=[('Camera/assets', ['Camera/main.kv','Camera/assets/detection.png','Camera/assets/list.png','Camera/assets/record.png'])],
     zip_safe    =False,
 #    install_requires=['kivy','kivymd'],
     include_package_data=True,
