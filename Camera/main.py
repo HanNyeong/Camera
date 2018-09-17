@@ -1,5 +1,7 @@
 import kivy
 kivy.require('1.0.7')
+from kivy.config import Config
+Config.set('graphics', 'fullscreen', 'off')
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
@@ -12,9 +14,8 @@ from kivymd.snackbar import Snackbar
 from getPortList import getPortLIst
 from kivy.core.window import Window
 from kivy.config import Config
-Config.set('graphics', 'resizable', '0') #0 being off 1 being on as in true/false
-Config.set('graphics', 'width', '500')
-Config.set('graphics', 'height', '500')
+Config.set('graphics', 'width', '200')
+Config.set('graphics', 'height', '200')
 main_widget_kv = '''
 #:import Toolbar kivymd.toolbar.Toolbar
 #:import ThemeManager kivymd.theming.ThemeManager
@@ -264,4 +265,7 @@ class Main(App):
         self.dialog.dismiss()
         print("reset")
 if __name__ == '__main__':
+    Config.set('graphics', 'fullscreen', 'auto')
+    Config.set('graphics', 'window_state', 'maximized')
+    Config.write()
     Main().run()
