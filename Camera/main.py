@@ -170,7 +170,6 @@ BoxLayout:
                                 on_release:app.showDialogToReset()
 '''
 
-Window.size = (600, 400)
 class Main(App):
 
     theme_cls = ThemeManager()
