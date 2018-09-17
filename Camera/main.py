@@ -1,5 +1,4 @@
-import kivy
-kivy.require('1.0.7')
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
