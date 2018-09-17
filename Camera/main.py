@@ -9,7 +9,7 @@ from kivymd.bottomsheet import MDGridBottomSheet
 from kivymd.label import MDLabel
 from kivymd.dialog import MDDialog
 from kivymd.snackbar import Snackbar
-from Camera.getPortList import getPortLIst
+from getPortList import getPortLIst
 
 
 class Main(App):
