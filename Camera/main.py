@@ -11,6 +11,10 @@ from kivymd.dialog import MDDialog
 from kivymd.snackbar import Snackbar
 from getPortList import getPortLIst
 from kivy.core.window import Window
+from kivy.config import Config
+Config.set('graphics', 'resizable', '0') #0 being off 1 being on as in true/false
+Config.set('graphics', 'width', '500')
+Config.set('graphics', 'height', '500')
 main_widget_kv = '''
 #:import Toolbar kivymd.toolbar.Toolbar
 #:import ThemeManager kivymd.theming.ThemeManager
