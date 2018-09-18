@@ -1,7 +1,11 @@
 import kivy
+
+
+from Camera.serialConnect import Serial
+
 kivy.require('1.0.7')
 from kivy.config import Config
-Config.set('graphics', 'fullscreen', 'off')
+
 from kivy.app import App
 from kivy.lang import Builder
 from kivy.properties import ObjectProperty
@@ -14,6 +18,7 @@ from kivymd.snackbar import Snackbar
 from getPortList import getPortLIst
 from kivy.core.window import Window
 from kivy.config import Config
+
 Config.set('graphics', 'width', '200')
 Config.set('graphics', 'height', '200')
 main_widget_kv = '''
@@ -194,6 +199,8 @@ class Main(App):
     def change_variable(self, value):
         self.value = value
         self.root.ids.portLabel.text = value
+        print(value)
+
 
 
 
@@ -214,6 +221,9 @@ class Main(App):
         # connection = serialConnect
         if(checkConnection):
             Snackbar(text="connect success").show()
+            self.serial = Serial(self.value)
+            self.serial.login()
+            self.serial.task()
             Clock.schedule_once(lambda dt: self.change_screen(), 3)
         else:
             Snackbar(text="connect fail").show()
@@ -230,12 +240,20 @@ class Main(App):
         bs.open()
     def userLIst(self):
         print('userLIst')
+        self.serial.userList()
+
 
     def faceRecord(self):
         print('faceRecord')
+        self.serial.faceRecord()
 
     def faceDetect(self):
         print('faceDetect')
+        self.serial.faceDetect()
+
+    def faceRegistration(self):
+        print('faceRegistration')
+        self.serial.faceRegistration()
 
     def disconnect(self):
         print("disconnect")
@@ -264,8 +282,11 @@ class Main(App):
     def resetData(self):
         self.dialog.dismiss()
         print("reset")
+
+
 if __name__ == '__main__':
     Config.set('graphics', 'fullscreen', 'auto')
     Config.set('graphics', 'window_state', 'maximized')
     Config.write()
     Main().run()
+
