@@ -16,6 +16,7 @@ from kivymd.label import MDLabel
 from kivymd.dialog import MDDialog
 from kivymd.snackbar import Snackbar
 from getPortList import getPortLIst
+from threading import Timer
 from kivy.core.window import Window
 from kivy.config import Config
 main_widget_kv = '''
@@ -186,6 +187,7 @@ class Main(App):
     nav_drawer = ObjectProperty()
 
     returnList = getPortLIst()
+
     port_list = []
 
     value = ""
@@ -221,9 +223,9 @@ class Main(App):
         # connection = serialConnect
         if(checkConnection):
             Snackbar(text="connect success").show()
-            # self.serial = Serial(self.value)
-            # self.serial.login()
-            # self.serial.task()
+            self.serial = Serial(self.value)
+            self.serial.login()
+            self.serial.task()
             Clock.schedule_once(lambda dt: self.change_screen(), 3)
         else:
             Snackbar(text="connect fail").show()
@@ -233,9 +235,9 @@ class Main(App):
         bs = MDGridBottomSheet()
         bs.add_item("User List", lambda *x: self.userLIst(),
                     icon_src='./assets/list.png')
-        bs.add_item("Face Record", lambda *x: self.faceRegistration(),
-                    icon_src='./assets/record.png')
         bs.add_item("Face Record", lambda *x: self.faceRecord(),
+                    icon_src='./assets/record.png')
+        bs.add_item("Face Regist", lambda *x: self.faceRegistration(),
                     icon_src='./assets/regist.png')
         bs.add_item("Face Detection", lambda *x: self.faceDetect(),
                     icon_src='./assets/detection.png')
